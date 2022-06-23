@@ -21,4 +21,9 @@ const getTenantDB = async tenantId => {
   return tenantDB;
 };
 
-const getCustomerModel = async tenantId => {};
+const getCustomerModel = async tenantId => {
+  const tenantDB = await getTenantDB(tenantId);
+  return tenantDB.model('Customers', customerSchema);
+};
+
+module.exports = { getCustomerModel };
