@@ -23,7 +23,10 @@ app.get('/tenant', async (req, res) => {
   let tenantId = req.query.tenantId;
   let tenantModel = await getTenantModel();
   const tenant = new tenantModel({ id: tenantId, name: tenantId });
-  let doc = await tenantModel.findOneAndUpdate({ id: tenant.id }, { i });
+  let doc = await tenantModel.findOneAndUpdate(
+    { id: tenant.id },
+    { id: tenantId, name: tenantId }
+  );
 
   if (!doc) {
     // if tenant not found then save tenant, for simplicity

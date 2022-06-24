@@ -1,4 +1,4 @@
-const connectDB = require('connect');
+const connectDB = require('./connect');
 const mongoose = require('mongoose');
 
 const url = `${process.env.MONGO_URL}/adminDB`;
