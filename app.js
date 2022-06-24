@@ -45,10 +45,26 @@ app.get('/customer', async (req, res) => {
   //   find tenant
   let tenant = await tenantModel.findOne({ id: tenantId });
   if (!tenant) {
-    return res.status(404).send('Tenant not found');
+    return res.status(404).json('Tenant not found');
   }
 
-  let customerModel = await getCustomerModel();
+  let customerModel = await getCustomerModel(tenantId);
+  const customer = await customerModel({ customerName });
+
+  let doc = await customerModel.findOneAndUpdate(
+    { customerName },
+    { customerName }
+  );
+
+  if (!doc) {
+    // save customer
+    customer.save(function (err) {
+      // handle err
+      console.log(err);
+    });
+  }
+
+  res.json(customer);
 });
 
 const port = process.env.PORT || 7500;

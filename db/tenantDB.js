@@ -1,8 +1,7 @@
-const connectDB = require('connect');
+const connectDB = require('./connect');
 const mongoose = require('mongoose');
 
-const url = `${process.env.MONGO_URL}`;
-
+console.log(url);
 let db;
 
 const customerSchema = mongoose.Schema(
@@ -16,7 +15,7 @@ const customerModel = mongoose.model('Customers', customerSchema);
 
 const getTenantDB = async tenantId => {
   const dbName = `tenant-${tenantId}`;
-  db = db ? db : connectDB(url);
+  db = db ? db : await connectDB(url);
   let tenantDB = db.useDb(dbName, { useCache: true });
   return tenantDB;
 };
