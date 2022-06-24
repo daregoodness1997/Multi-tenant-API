@@ -9,12 +9,12 @@ const mongoOptions = {
 };
 
 const connectDB = async connection_url => {
-  try {
-    mongoose.connect(connection_url, mongoOptions);
-    console.log('Database connected');
-  } catch (e) {
-    console.log('Database not connected' + e);
-  }
+  return new Promise(async (resolve, reject) => {
+    const connection = await mongoose
+      .createConnection(connection_url, mongoOptions)
+      .asPromise();
+    resolve(connection);
+  });
 };
 
 module.exports = connectDB;

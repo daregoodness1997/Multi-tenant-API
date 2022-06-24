@@ -23,7 +23,10 @@ app.get('/tenant', async (req, res) => {
   let tenantId = req.query.tenantId;
   let tenantModel = await getTenantModel();
   const tenant = new tenantModel({ id: tenantId, name: tenantId });
-  let doc = await tenantModel.findOneAndUpdate({ id: tenant.id }, { i });
+  let doc = await tenantModel.findOneAndUpdate(
+    { id: tenant.id },
+    { id: tenantId, name: tenantId }
+  );
 
   if (!doc) {
     // if tenant not found then save tenant, for simplicity
@@ -42,10 +45,26 @@ app.get('/customer', async (req, res) => {
   //   find tenant
   let tenant = await tenantModel.findOne({ id: tenantId });
   if (!tenant) {
-    return res.status(404).send('Tenant not found');
+    return res.status(404).json('Tenant not found');
   }
 
-  let customerModel = await getCustomerModel();
+  let customerModel = await getCustomerModel(tenantId);
+  const customer = await customerModel({ customerName });
+
+  let doc = await customerModel.findOneAndUpdate(
+    { customerName },
+    { customerName }
+  );
+
+  if (!doc) {
+    // save customer
+    customer.save(function (err) {
+      // handle err
+      console.log(err);
+    });
+  }
+
+  res.json(customer);
 });
 
 const port = process.env.PORT || 7500;
